@@ -5,6 +5,8 @@ exports.auditLoggingMiddleware = (req, res, next) => {
 
   const entry = {
     action: `${req.method}, ${req.originalUrl}`,
+    params: req.params ?? undefined,
+    body: req.body ?? null,
     occurredAt: new Date(),
     context: {
       location: ip,

@@ -8,6 +8,7 @@ const app = express();
 
 // create application/json parser
 var jsonParser = bodyParser.json();
+app.use(jsonParser);
 
 // auditing
 app.use(auditLoggingMiddleware);
@@ -28,9 +29,8 @@ app
     });
   });
 
-// POST /api/scrape gets JSON bodies
-app.post("/scrape", jsonParser, (req, res, next) => {
-  console.log(req.body);
+// POST /api/scrape gets JSON body
+app.post("/scrape", (req, res, next) => {
   scraper.performScraping(req.body?.filename || "").then((data) => {
     res.json(data);
   });
