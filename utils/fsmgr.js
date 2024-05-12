@@ -9,6 +9,12 @@ const saveToFile = (filename, data) => {
   }
 };
 
+// const createWriteStream = (path, options) => {
+//   if (path) {
+//     fs.createWriteStream(path, { ...options, flsgs:  });
+//   }
+// };
+
 module.exports = {
   saveToFile,
 };

@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const scraper = require("./routes/scrape");
 const { auditLoggingMiddleware } = require("./middlewares/audit-logging");
+const { console } = require("./utils/logger");
 
 const PORT = process.env.PORT || 8000;
 const app = express();

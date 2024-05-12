@@ -1,3 +1,5 @@
+const { console } = require("../utils/logger");
+
 exports.auditLoggingMiddleware = (req, res, next) => {
   // get the IP and user agent of the request, if available
   const ip = (req.headers["x-forwarded-for"] || req.ip) ?? "";
