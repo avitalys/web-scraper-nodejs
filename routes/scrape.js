@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const fs = require("fs");
+const { saveToFile } = require("../utils/fsmgr");
 
 // const URL = "https://www.theguardian.com/international";
 const URL = "https://m.imdb.com/chart/tvmeter/?ref_=nv_tvv_mptv";
@@ -51,15 +51,6 @@ const performScraping = async (filename) => {
     saveToFile(filename, scrappedData);
   } else {
     return scrappedData;
-  }
-};
-
-const saveToFile = (filename, data) => {
-  if (filename) {
-    fs.writeFile(`./dist/${filename}.json`, JSON.stringify(data), (err) => {
-      if (err) throw err;
-      console.log("Done writing");
-    });
   }
 };
 

@@ -1,0 +1,14 @@
+const fs = require("fs");
+
+const saveToFile = (filename, data) => {
+  if (filename) {
+    fs.writeFile(`./dist/${filename}.json`, JSON.stringify(data), (err) => {
+      if (err) throw err;
+      console.log("Done writing");
+    });
+  }
+};
+
+module.exports = {
+  saveToFile,
+};

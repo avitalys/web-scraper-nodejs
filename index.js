@@ -1,9 +1,13 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const scraper = require("./routes/scrape");
 const { auditLoggingMiddleware } = require("./middlewares/audit-logging");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
+
+// create application/json parser
+var jsonParser = bodyParser.json();
 
 // auditing
 app.use(auditLoggingMiddleware);
@@ -23,6 +27,14 @@ app
       res.json(data);
     });
   });
+
+// POST /api/scrape gets JSON bodies
+app.post("/scrape", jsonParser, (req, res, next) => {
+  console.log(req.body);
+  scraper.performScraping(req.body?.filename || "").then((data) => {
+    res.json(data);
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`App is listening on port ${PORT}`);
