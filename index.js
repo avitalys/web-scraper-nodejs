@@ -23,18 +23,20 @@ app
   .get("/", (req, res) => {
     res.send("welcome!");
   })
-  .route("/scrape")
+  .route("/scrape/:rows")
   .get((req, res, next) => {
-    scraper.performScraping().then((data) => {
+    scraper.performScraping(null, req.params?.rows).then((data) => {
       res.json(data);
     });
   });
 
 // POST /api/scrape gets JSON body
-app.post("/scrape", (req, res, next) => {
-  scraper.performScraping(req.body?.filename || "").then((data) => {
-    res.json(data);
-  });
+app.post("/scrape/:rows", (req, res, next) => {
+  scraper
+    .performScraping(req.body?.filename || "", req.params?.rows)
+    .then((data) => {
+      res.json(data);
+    });
 });
 
 app.listen(PORT, () => {

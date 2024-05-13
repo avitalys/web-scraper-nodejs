@@ -22,7 +22,7 @@ const dowloadPage = async () => {
   }
 };
 
-const performScraping = async (filename) => {
+const performScraping = async (filename, rows) => {
   try {
     const html = await dowloadPage();
 
@@ -30,6 +30,8 @@ const performScraping = async (filename) => {
     const $ = cheerio.load(html);
 
     $(".ipc-metadata-list-summary-item", html).each((index, element) => {
+      if (rows && rows <= index) return false;
+
       const title = $(element).find(".ipc-title").text();
       const tumbnail = $(element).find(".ipc-image").attr("src");
       const type = $(element).find(".cli-title-type-data").text();
