@@ -1,0 +1,13 @@
+2024-05-13 21:08:4747 | INFO | "App is listening on port 8000"
+2024-05-13 21:11:4444 | INFO | "App is listening on port 8000"
+2024-05-13 21:11:4949 | INFO | {"action":"POST, /scrape/3","params":{},"body":{"filename":"TMDB-TV.example"},"occurredAt":"2024-05-13T18:11:49.355Z","context":{"location":"127.0.0.1","userAgent":"PostmanRuntime/7.37.3"}}
+2024-05-13 21:12:0505 | INFO | "App is listening on port 8000"
+2024-05-13 21:12:1313 | INFO | {"action":"POST, /scrape/3","params":{},"body":{"filename":"TMDB-TV.example"},"occurredAt":"2024-05-13T18:12:13.521Z","context":{"location":"127.0.0.1","userAgent":"PostmanRuntime/7.37.3"}}
+2024-05-13 21:13:0808 | INFO | "App is listening on port 8000"
+2024-05-13 21:14:2525 | INFO | "App is listening on port 8000"
+2024-05-13 21:14:4242 | INFO | {"action":"POST, /scrape/3","params":{},"body":{"filename":"TMDB-TV.example"},"occurredAt":"2024-05-13T18:14:42.316Z","context":{"location":"127.0.0.1","userAgent":"PostmanRuntime/7.37.3"}}
+2024-05-13 21:14:4545 | INFO | "Done writing to file /TMDB-TV.example"
+2024-05-13 21:24:4848 | INFO | "App is listening on port 8000"
+2024-05-13 21:24:5858 | INFO | {"action":"GET, /","params":{},"body":{},"occurredAt":"2024-05-13T18:24:58.709Z","context":{"location":"127.0.0.1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"}}
+2024-05-13 21:25:2020 | INFO | {"action":"GET, /scrape/5","params":{},"body":{},"occurredAt":"2024-05-13T18:25:20.538Z","context":{"location":"127.0.0.1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"}}
+

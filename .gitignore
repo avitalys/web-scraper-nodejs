@@ -1,5 +1,6 @@
-logs
+logs/*
 node_modules
 .env
 dist/*
 !dist/example.json
+!logs/*.example.txt
