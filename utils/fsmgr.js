@@ -4,7 +4,7 @@ const { console } = require("../utils/logger");
 const saveToFile = (filename, data) => {
   if (filename) {
     fs.writeFile(`./dist/${filename}.json`, JSON.stringify(data), (err) => {
-      if (err) throw new Error("saveToFile failed", { cause: err });
+      if (err) throw new Error("saveToFile failed");
 
       console.log(`Done writing to file /${filename}`);
     });

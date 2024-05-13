@@ -18,12 +18,15 @@ app.use("/scrape", (req, res, next) => {
   res.header("Content-Type", "application/json");
   next();
 });
+app.use((err, req, res, next) => {
+  console.error(err);
+});
 
 app
   .get("/", (req, res) => {
     res.send("welcome!");
   })
-  .route("/scrape/:rows")
+  .route("/scrape/:rows(\\d+)")
   .get((req, res, next) => {
     scraper.performScraping(null, req.params?.rows).then((data) => {
       res.json(data);
@@ -31,7 +34,7 @@ app
   });
 
 // POST /api/scrape gets JSON body
-app.post("/scrape/:rows", (req, res, next) => {
+app.post("/scrape/:rows(\\d+)", (req, res, next) => {
   scraper
     .performScraping(req.body?.filename || "", req.params?.rows)
     .then((data) => {

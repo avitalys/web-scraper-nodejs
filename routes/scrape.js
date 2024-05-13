@@ -57,9 +57,12 @@ const performScraping = async (filename, rows) => {
     }
   } catch (err) {
     console.error(
-      new Error(`Scraping action failed with error: ${err.message}`, {
-        cause: err,
-      })
+      new Error(
+        `Scraping action failed with error: ${err.message.slice(0, 40)}`,
+        {
+          cause: err,
+        }
+      )
     );
   }
 };

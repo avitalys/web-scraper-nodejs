@@ -2,45 +2,51 @@ const fs = require("fs");
 const util = require("util");
 const dayjs = require("dayjs");
 const consts = require("../consts");
-const { Console } = require("node:console");
+//const { Console } = require("node:console");
 
-var today = dayjs().format("YYYY-MM-DD-HH-mm");
+var day = dayjs().format("YYYY-MM-DD");
 
 const fileOutput = fs.createWriteStream(
-  `${consts.LOGS_DIRNAME}/stdout_${today}.txt`,
+  `${consts.LOGS_DIRNAME}/stdout_${day}.txt`,
   {
-    flag: "as",
+    flags: "as+",
   }
 );
 const errorOutput = fs.createWriteStream(
-  `${consts.LOGS_DIRNAME}/stderr_${today}.txt`
+  `${consts.LOGS_DIRNAME}/stderr_${day}.txt`,
+  {
+    flags: "a+",
+  }
 );
 const consoleOutput = process.stdout;
 
-const formatLogMessage = (e) => {
-  const msg = JSON.stringify(e).trim();
-  const formattedMsg = `${dayjs().format(
-    "YYYY-MM-DD HH:mm:ssss"
-  )} | INFO | ${util.format(msg)}`;
-
-  return formattedMsg;
+const formatLogMessage = (e, level) => {
+  try {
+    const formattedMsg = `${dayjs().format(
+      "YYYY-MM-DD HH:mm:ssss"
+    )} | ${level} | ${util.format(e) ?? "empty"}`;
+    return formattedMsg;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // stdout is a writable stream to print log or info output.
 // stderr is used for warning or error output.
-const console = new Console({ stdout: fileOutput, stderr: errorOutput });
+//const console = new Console({ stdout: fileOutput, stderr: errorOutput });
 
 const level = consts.LOG_LEVEL;
 
 console.log = (e) => {
-  const msg = formatLogMessage(e, level.INFO);
+  const msg = formatLogMessage(JSON.stringify(e)?.trim(), level.INFO);
   fileOutput.write(msg + "\n");
   consoleOutput.write(msg + "\n");
 };
 
 console.error = (e) => {
   const msg = formatLogMessage(e, level.ERROR);
-  ErrorLog.write(msg + "\n");
+  consoleOutput.write(msg + "\n");
+  errorOutput.write(msg + "\n");
 };
 
 module.exports = { console };
