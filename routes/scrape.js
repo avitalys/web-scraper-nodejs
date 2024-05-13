@@ -1,16 +1,16 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
-const { saveToFile } = require("../utils/fsmgr");
 
-// const URL = "https://www.theguardian.com/international";
-const URL = "https://m.imdb.com/chart/tvmeter/?ref_=nv_tvv_mptv";
+const { DEFAULTS } = require("../consts");
+const { saveToFile } = require("../utils/fsmgr");
+const { console } = require("../utils/logger");
 
 // downloading the target web page by performing an HTTP GET request in Axios
 const dowloadPage = async () => {
   try {
     const response = await axios.request({
       method: "GET",
-      url: URL,
+      url: DEFAULTS.URL,
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -18,39 +18,47 @@ const dowloadPage = async () => {
     });
     return response.data;
   } catch (error) {
-    console.log(`Request failed with ${error.message}`);
+    console.error(`Request failed with ${error.message}`);
   }
 };
 
 const performScraping = async (filename) => {
-  const html = await dowloadPage();
+  try {
+    const html = await dowloadPage();
 
-  const scrappedData = [];
-  const $ = cheerio.load(html);
+    const scrappedData = [];
+    const $ = cheerio.load(html);
 
-  $(".ipc-metadata-list-summary-item", html).each((index, element) => {
-    const title = $(element).find(".ipc-title").text();
-    const tumbnail = $(element).find(".ipc-image").attr("src");
-    const type = $(element).find(".cli-title-type-data").text();
+    $(".ipc-metadata-list-summary-item", html).each((index, element) => {
+      const title = $(element).find(".ipc-title").text();
+      const tumbnail = $(element).find(".ipc-image").attr("src");
+      const type = $(element).find(".cli-title-type-data").text();
 
-    const rank = $(element).find(".cli-meter-title-header").text();
-    const rating = $(element).find(".ipc-rating-star").text().trim();
-    const data1 = $(element).find(".cli-title-metadata").text();
+      const rank = $(element).find(".cli-meter-title-header").text();
+      const rating = $(element).find(".ipc-rating-star").text().trim();
+      const data1 = $(element).find(".cli-title-metadata").text();
 
-    scrappedData.push({
-      title,
-      tumbnail,
-      type,
-      rank,
-      rating,
-      data1,
+      scrappedData.push({
+        title,
+        tumbnail,
+        type,
+        rank,
+        rating,
+        data1,
+      });
     });
-  });
 
-  if (filename) {
-    saveToFile(filename, scrappedData);
-  } else {
-    return scrappedData;
+    if (filename) {
+      saveToFile(filename, scrappedData);
+    } else {
+      return scrappedData;
+    }
+  } catch (err) {
+    console.error(
+      new Error(`Scraping action failed with error: ${err.message}`, {
+        cause: err,
+      })
+    );
   }
 };
 

@@ -20,7 +20,7 @@ const consoleOutput = process.stdout;
 const formatLogMessage = (e) => {
   const msg = JSON.stringify(e).trim();
   const formattedMsg = `${dayjs().format(
-    "YYYY-MM-DD HH:mm:sss"
+    "YYYY-MM-DD HH:mm:ssss"
   )} | INFO | ${util.format(msg)}`;
 
   return formattedMsg;
