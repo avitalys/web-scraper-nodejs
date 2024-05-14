@@ -26,17 +26,31 @@ app
   .get("/", (req, res) => {
     res.send("welcome!");
   })
-  .route("/scrape/:rows(\\d+)")
+  .route("/scrape/:rows(\\d+)?")
   .get((req, res, next) => {
-    scraper.performScraping(null, req.params?.rows).then((data) => {
+    scraper.scrapeSourcesListAsync(null, req.params?.rows).then((data) => {
       res.json(data);
     });
   });
 
-// POST /api/scrape gets JSON body
-app.post("/scrape/:rows(\\d+)", (req, res, next) => {
+app.route("/TMDB/scrape/:rows(\\d+)?").get((req, res, next) => {
+  scraper.performScraping(null, req.params?.rows).then((data) => {
+    res.json(data);
+  });
+});
+
+// POST /api/TMDB/scrape gets JSON body from TMDB
+app.post("/TMDB/scrape/:rows(\\d+)?", (req, res, next) => {
   scraper
     .performScraping(req.body?.filename || "", req.params?.rows)
+    .then((data) => {
+      res.json(data);
+    });
+});
+
+app.post("/scrape/:rows(\\d+)?", (req, res, next) => {
+  scraper
+    .scrapeSourcesListAsync(req.body?.filename || "", req.params?.rows)
     .then((data) => {
       res.json(data);
     });

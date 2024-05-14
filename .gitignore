@@ -2,5 +2,5 @@ logs/*
 node_modules
 .env
 dist/*
-!dist/example.json
+!dist/*.example.json
 !logs/*.example.txt

@@ -38,7 +38,8 @@ const formatLogMessage = (e, level) => {
 const level = consts.LOG_LEVEL;
 
 console.log = (e) => {
-  const msg = formatLogMessage(JSON.stringify(e)?.trim(), level.INFO);
+  const text = JSON.stringify(e)?.trim() ?? e;
+  const msg = formatLogMessage(text, level.INFO);
   fileOutput.write(msg + "\n");
   consoleOutput.write(msg + "\n");
 };
@@ -47,6 +48,16 @@ console.error = (e) => {
   const msg = formatLogMessage(e, level.ERROR);
   consoleOutput.write(msg + "\n");
   errorOutput.write(msg + "\n");
+};
+
+console.trace = (e) => {
+  const msg = formatLogMessage(e, level.TRACE);
+  consoleOutput.write(msg + "\n");
+  errorOutput.write(msg + "\n");
+};
+
+console.debug = (e) => {
+  consoleOutput.write(e + "\n");
 };
 
 module.exports = { console };

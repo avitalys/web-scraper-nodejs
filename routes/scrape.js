@@ -6,11 +6,11 @@ const { saveToFile } = require("../utils/fsmgr");
 const { console } = require("../utils/logger");
 
 // downloading the target web page by performing an HTTP GET request in Axios
-const dowloadPage = async () => {
+const dowloadPage = async (url = DEFAULTS.URL) => {
   try {
     const response = await axios.request({
       method: "GET",
-      url: DEFAULTS.URL,
+      url: url,
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -19,6 +19,74 @@ const dowloadPage = async () => {
     return response.data;
   } catch (error) {
     console.error(`Request failed with ${error.message}`);
+  }
+};
+
+const newspapers = [
+  {
+    name: "telegraph",
+    address: "https://www.telegraph.co.uk/technology/",
+    root: "#main-content > section:first",
+    urlbase: "https://www.telegraph.co.uk",
+    imagebase: "https://www.telegraph.co.uk/",
+  },
+  {
+    name: "nyt",
+    address: "https://www.nytimes.com/international/section/technology",
+    root: "#collection-highlights-container",
+    urlbase: "https://www.nytimes.com",
+    imagebase: "",
+  },
+  {
+    name: "guardian",
+    address: "https://www.theguardian.com/technology/all",
+    root: "section:first",
+    urlbase: "",
+    imagebase: "",
+  },
+];
+
+const scrapeSourcesListAsync = async (filename, rows, sources) => {
+  const scrappedData = [];
+
+  try {
+    sources = newspapers;
+
+    const Pages = await Promise.all(
+      sources.map(async (source) => {
+        const html = await dowloadPage(source.address);
+        const $ = cheerio.load(html);
+
+        $(`${source.root ?? "body"} li`, html).each((index, element) => {
+          if (rows && rows <= index) return false;
+
+          const image = $(element).find("img").attr("src") ?? "";
+          const time = $(element).find("time").attr("datetime") ?? "";
+
+          const href = $(element).find("a");
+          const title = href.text().trim() ?? "";
+          const url = href.attr("href") ?? "";
+
+          if (title !== "" || url !== "") {
+            scrappedData.push({
+              title,
+              image: source.imagebase + image,
+              url: source.urlbase + url,
+              source: source.name,
+              time,
+            });
+          }
+        });
+      })
+    );
+
+    if (filename) {
+      saveToFile(filename, scrappedData);
+    } else {
+      return scrappedData;
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -69,4 +137,5 @@ const performScraping = async (filename, rows) => {
 
 module.exports = {
   performScraping,
+  scrapeSourcesListAsync,
 };
