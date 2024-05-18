@@ -24,21 +24,21 @@ const dowloadPage = async (url = DEFAULTS.URL) => {
 
 const newspapers = [
   {
-    name: "telegraph",
+    name: "The Telegraph",
     address: "https://www.telegraph.co.uk/technology/",
     root: "#main-content > section:first",
     urlbase: "https://www.telegraph.co.uk",
     imagebase: "https://www.telegraph.co.uk/",
   },
   {
-    name: "nyt",
+    name: "The New York Times",
     address: "https://www.nytimes.com/international/section/technology",
     root: "#collection-highlights-container",
     urlbase: "https://www.nytimes.com",
     imagebase: "",
   },
   {
-    name: "guardian",
+    name: "The Gurdian",
     address: "https://www.theguardian.com/technology/all",
     root: "section:first",
     urlbase: "",
