@@ -33,6 +33,14 @@ app
     });
   });
 
+app.route("/news/:category/:rows(\\d+)?").get((req, res, next) => {
+  scraper
+    .scrapeSourcesListAsync(null, req.params.category, req.params?.rows)
+    .then((data) => {
+      res.json(data);
+    });
+});
+
 app.route("/TMDB/scrape/:rows(\\d+)?").get((req, res, next) => {
   scraper.performScraping(null, req.params?.rows).then((data) => {
     res.json(data);

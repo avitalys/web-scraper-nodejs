@@ -25,36 +25,68 @@ const dowloadPage = async (url = DEFAULTS.URL) => {
 const newspapers = [
   {
     name: "The Telegraph",
-    address: "https://www.telegraph.co.uk/technology/",
+    address: "https://www.telegraph.co.uk/@/",
     root: "#main-content > section:first",
     urlbase: "https://www.telegraph.co.uk",
     imagebase: "https://www.telegraph.co.uk/",
   },
   {
     name: "The New York Times",
-    address: "https://www.nytimes.com/international/section/technology",
+    address: "https://www.nytimes.com/international/section/@",
     root: "#collection-highlights-container",
     urlbase: "https://www.nytimes.com",
     imagebase: "",
   },
   {
     name: "The Gurdian",
-    address: "https://www.theguardian.com/technology/all",
+    address: "https://www.theguardian.com/@/all",
     root: "section:first",
     urlbase: "",
     imagebase: "",
   },
+  // {
+  //   name: "Reuters",
+  //   address: "https://www.reuters.com/technology/",
+  //   root: ".main-content",
+  //   urlbase: "https://www.reuters.com/",
+  //   imagebase: "",
+  // },
+  // {
+  //   name: "Washington Post",
+  //   address: "https://www.washingtonpost.com/@/",
+  //   root: "",
+  //   urlbase: "",
+  //   imagebase: "",
+  // },
 ];
 
-const scrapeSourcesListAsync = async (filename, rows, sources) => {
+const catogeries = [
+  "technology",
+  "science",
+  "buisness",
+  "enviornment",
+  "food",
+  "music",
+  "games",
+  "culture",
+  "travel",
+  "music",
+  "health",
+  "sport",
+  "style",
+];
+
+const scrapeSourcesListAsync = async (filename, category, rows) => {
   const scrappedData = [];
 
   try {
-    sources = newspapers;
+    if (!catogeries.includes(category)) throw "cannot return data";
 
     const Pages = await Promise.all(
-      sources.map(async (source) => {
-        const html = await dowloadPage(source.address);
+      newspapers.map(async (source) => {
+        const html = await dowloadPage(source.address.replace("@", category));
+
+        if (typeof html !== "string") return false;
         const $ = cheerio.load(html);
 
         $(`${source.root ?? "body"} li`, html).each((index, element) => {
