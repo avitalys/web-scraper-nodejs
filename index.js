@@ -3,12 +3,14 @@ const bodyParser = require("body-parser");
 const scraper = require("./routes/scrape");
 const { auditLoggingMiddleware } = require("./middlewares/audit-logging");
 const { console } = require("./utils/logger");
+var cors = require("cors");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
 
 // create application/json parser
 var jsonParser = bodyParser.json();
+// app.use(cors());
 app.use(jsonParser);
 
 // auditing
@@ -33,7 +35,7 @@ app
     });
   });
 
-app.route("/news/:category/:rows(\\d+)?").get((req, res, next) => {
+app.get("/news/:category/:rows(\\d+)?", cors(), function (req, res, next) {
   scraper
     .scrapeSourcesListAsync(null, req.params.category, req.params?.rows)
     .then((data) => {

@@ -95,7 +95,7 @@ const scrapeSourcesListAsync = async (filename, category, rows) => {
           const image = $(element).find("img").attr("src") ?? "";
           const time = $(element).find("time").attr("datetime") ?? "";
 
-          const href = $(element).find("a");
+          const href = $(element).find("a:first");
           const title = href.text().trim() ?? "";
           const url = href.attr("href") ?? "";
 
