@@ -102,7 +102,7 @@ const scrapeSourcesListAsync = async (filename, category, rows) => {
           if (title !== "" || url !== "") {
             scrappedData.push({
               title,
-              image: source.imagebase + image,
+              image: image && source.imagebase + image,
               url: source.urlbase + url,
               source: source.name,
               time,
