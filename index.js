@@ -8,9 +8,14 @@ var cors = require("cors");
 const PORT = process.env.PORT || 8000;
 const app = express();
 
+var corsOptions = {
+  // origin: "http://example.com",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+// app.use(cors(corsOptions)); // for all routes
+
 // create application/json parser
 var jsonParser = bodyParser.json();
-// app.use(cors());
 app.use(jsonParser);
 
 // auditing
@@ -35,13 +40,17 @@ app
     });
   });
 
-app.get("/news/:category/:rows(\\d+)?", cors(), function (req, res, next) {
-  scraper
-    .scrapeSourcesListAsync(null, req.params.category, req.params?.rows)
-    .then((data) => {
-      res.json(data);
-    });
-});
+app.get(
+  "/news/:category/:rows(\\d+)?",
+  cors(corsOptions),
+  function (req, res, next) {
+    scraper
+      .scrapeSourcesListAsync(null, req.params.category, req.params?.rows)
+      .then((data) => {
+        res.json(data);
+      });
+  }
+);
 
 app.route("/TMDB/scrape/:rows(\\d+)?").get((req, res, next) => {
   scraper.performScraping(null, req.params?.rows).then((data) => {
