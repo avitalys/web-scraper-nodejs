@@ -49,9 +49,11 @@ app
   })
   .route("/scrape/:rows(\\d+)?")
   .get((req, res, next) => {
-    scraper.scrapeSourcesListAsync(null, req.params?.rows).then((data) => {
-      res.json(data);
-    });
+    scraper
+      .scrapeSourcesListAsync(null, "business", req.params?.rows)
+      .then((data) => {
+        res.json(data);
+      });
   });
 
 app.get(

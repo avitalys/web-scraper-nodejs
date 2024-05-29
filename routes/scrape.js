@@ -63,7 +63,7 @@ const newspapers = [
 const catogeries = [
   "technology",
   "science",
-  "buisness",
+  "business",
   "enviornment",
   "food",
   "music",
