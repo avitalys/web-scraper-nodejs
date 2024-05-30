@@ -50,7 +50,7 @@ app
   .route("/scrape/:rows(\\d+)?")
   .get((req, res, next) => {
     scraper
-      .scrapeSourcesListAsync(null, "business", req.params?.rows)
+      .scrapeHrefByCategoryAsync(null, "business", req.params?.rows)
       .then((data) => {
         res.json(data);
       });

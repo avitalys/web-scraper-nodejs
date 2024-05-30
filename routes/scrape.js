@@ -58,6 +58,13 @@ const newspapers = [
   //   urlbase: "",
   //   imagebase: "",
   // },
+  // {
+  //   name: "NBC News",
+  //   address: "https://www.nbcnews.com/@",
+  //   root: "",
+  //   urlbase: "",
+  //   imagebase: "",
+  // },
 ];
 
 const catogeries = [
@@ -75,6 +82,57 @@ const catogeries = [
   "sport",
   "style",
 ];
+
+// // TODO: Tryingto build more potent scraping
+// const scrapeHrefByCategoryAsync = async (filename, category, rows) => {
+//   const scrappedData = [];
+
+//   try {
+//     if (!catogeries.includes(category)) throw "cannot return data";
+
+//     const Pages = await Promise.all(
+//       newspapers.map(async (source) => {
+//         const html = await dowloadPage(source.address.replace("@", category));
+
+//         if (typeof html !== "string") return false;
+//         const $ = cheerio.load(html);
+//         //console.log($(`a[href*="${category}"]`, html).length);
+
+//         $(`${source.root ?? "body"} li a[href*="${category}"]`, html).each(
+//           (index, element) => {
+//             if (rows && rows <= index) return false;
+
+//             const parent = $(element).closest("li");
+//             const image = parent.find("img").attr("src") ?? "";
+//             const time = parent.find("time").attr("datetime") ?? "";
+
+//             const href = $(element);
+//             const title = href.text().trim() ?? "";
+//             const url = href.attr("href") ?? "";
+
+//             if (title !== "" || url !== "") {
+//               scrappedData.push({
+//                 title,
+//                 image: image && source.imagebase + image,
+//                 url: source.urlbase + url,
+//                 source: source.name,
+//                 time,
+//               });
+//             }
+//           }
+//         );
+//       })
+//     );
+
+//     if (filename) {
+//       saveToFile(filename, scrappedData);
+//     } else {
+//       return scrappedData;
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 const scrapeSourcesListAsync = async (filename, category, rows) => {
   const scrappedData = [];
@@ -122,6 +180,7 @@ const scrapeSourcesListAsync = async (filename, category, rows) => {
   }
 };
 
+// TMDB
 const performScraping = async (filename, rows) => {
   try {
     const html = await dowloadPage();
@@ -170,4 +229,5 @@ const performScraping = async (filename, rows) => {
 module.exports = {
   performScraping,
   scrapeSourcesListAsync,
+  scrapeHrefByCategoryAsync,
 };
